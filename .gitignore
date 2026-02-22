@@ -1,0 +1,24 @@
+# Backend (Spring Boot - Maven)
+target/
+*.log
+
+# Frontend (Angular)
+node_modules/
+dist/
+.angular/
+coverage/
+
+
+# IDE Files
+.idea/
+*.iml
+.vscode/
+
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+
+# Environment Files
+.env

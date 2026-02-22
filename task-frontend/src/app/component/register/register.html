@@ -1,0 +1,85 @@
+<div>
+  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+
+    <div>
+      <label for="name">Name:</label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        [(ngModel)]="formData.name" 
+        required 
+        minlength="3"
+        pattern="^[a-zA-Z ]+$"
+        #name="ngModel"
+        placeholder="Enter your name.."
+      />
+
+      @if (name.invalid && name.touched){
+        <small>name required in correct format.</small>
+      }
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        [(ngModel)]="formData.email" 
+        required 
+        email
+        #email="ngModel"
+        placeholder="abc@gmail.com"
+      />
+
+      @if (email.invalid && email.touched){
+        <small>email required in correct format.</small>
+      }
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input 
+        type="text" 
+        id="password" 
+        name="password" 
+        [(ngModel)]="formData.password" 
+        required 
+        minlength="8"
+        #password="ngModel"
+        placeholder="Enter your password.."
+      />
+
+      @if (password.invalid && password.touched){
+        <small>password required in correct format.</small>
+      }
+    </div>
+
+    <div>
+      <label for="confirmPassword">ConfirmPassword:</label>
+      <input 
+        type="text" 
+        id="confirmPassword" 
+        name="confirmPassword" 
+        [(ngModel)]="formData.confirmPassword" 
+        required 
+        #confirmPassword="ngModel"
+        placeholder="confirm your password"
+      />
+
+      @if(confirmPassword.touched){
+        @if (formData.password !== formData.confirmPassword){
+          <small>confirm password should match with password.</small>
+        }
+      }
+    </div>
+
+    <button 
+      type="submit" 
+      [disabled]="form.invalid || formData.password !== formData.confirmPassword">
+      Register
+    </button>
+
+  </form>
+</div>

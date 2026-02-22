@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: task-backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskmanagement
+    username: root
+    password: '0000'
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  secretKey: q9VxYk3pT2mL8sWzH4fRn6UaC1dE7jKbQ2tPv9XyZ5aN0cLd
+  expirationTime: 120000
