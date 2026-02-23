@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { RegisterRequest, AuthService } from '../../service/auth-service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService, RegisterRequest } from '../../service/auth-service';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-
 export class Register {
+
   formData = {
     name: '',
     email: '',
@@ -17,24 +19,44 @@ export class Register {
     confirmPassword: ''
   };
 
-  constructor(private authService: AuthService){}
+  isSubmitting = false;
 
-  onSubmit(form: NgForm){
-    if(form.invalid){
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
+
+  onSubmit(form: NgForm): void {
+
+    if (form.invalid) {
       return;
     }
 
-    if(this.formData.password !== this.formData.confirmPassword){
-      alert('Passwords do not match!');
+    if (this.formData.password !== this.formData.confirmPassword) {
+      console.warn('Passwords do not match');
       return;
     }
 
     const request: RegisterRequest = {
-      name: this.formData.name,
-      email: this.formData.email,
+      name: this.formData.name.trim(),
+      email: this.formData.email.trim(),
       password: this.formData.password
-    }
+    };
 
-    console.log(request);
+    this.isSubmitting = true;
+
+    this.authService.register(request).subscribe({
+      next: (res) => {
+        console.log('Registration successful:', res.message);
+        form.resetForm();
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Registration failed:', err?.error?.message || err.message);
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      }
+    });
   }
 }

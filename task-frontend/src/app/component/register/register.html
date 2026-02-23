@@ -1,85 +1,156 @@
-<div>
-  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+<form 
+  (ngSubmit)="onSubmit(form)" 
+  #form="ngForm" 
+  novalidate
+  class="mx-auto mt-10 w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-lg"
+>
 
-    <div>
-      <label for="name">Name:</label>
-      <input 
-        type="text" 
-        id="name" 
-        name="name" 
-        [(ngModel)]="formData.name" 
-        required 
-        minlength="3"
-        pattern="^[a-zA-Z ]+$"
-        #name="ngModel"
-        placeholder="Enter your name.."
-      />
+  <!-- Title -->
+  <h2 class="mb-1 text-2xl font-extrabold text-slate-900">
+    Create your account
+  </h2>
 
-      @if (name.invalid && name.touched){
-        <small>name required in correct format.</small>
-      }
-    </div>
+  <p class="mb-6 text-sm text-slate-500">
+    Sign up to start organizing your tasks efficiently.
+  </p>
 
-    <div>
-      <label for="email">Email:</label>
-      <input 
-        type="email" 
-        id="email" 
-        name="email" 
-        [(ngModel)]="formData.email" 
-        required 
-        email
-        #email="ngModel"
-        placeholder="abc@gmail.com"
-      />
+  <!-- Name -->
+  <div class="mb-4">
+    <label for="name" class="mb-1 block text-sm font-semibold text-slate-700">
+      Name
+    </label>
 
-      @if (email.invalid && email.touched){
-        <small>email required in correct format.</small>
-      }
-    </div>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="formData.name"
+      #name="ngModel"
+      required
+      minlength="3"
+      pattern="^[A-Za-z ]+$"
+      placeholder="Enter your name.."
+      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+      [class.border-red-500]="name.invalid && (name.dirty || name.touched)"
+    />
 
-    <div>
-      <label for="password">Password:</label>
-      <input 
-        type="text" 
-        id="password" 
-        name="password" 
-        [(ngModel)]="formData.password" 
-        required 
-        minlength="8"
-        #password="ngModel"
-        placeholder="Enter your password.."
-      />
+    @if (name.invalid && (name.dirty || name.touched)) {
+      <small class="mt-1 block text-sm text-red-600">
+        @if (name.errors?.['required']) { Name is required. }
+        @if (name.errors?.['minlength']) { Name should be at least 3 characters. }
+        @if (name.errors?.['pattern']) { Only letters and spaces are allowed. }
+      </small>
+    }
+  </div>
 
-      @if (password.invalid && password.touched){
-        <small>password required in correct format.</small>
-      }
-    </div>
+  <!-- Email -->
+  <div class="mb-4">
+    <label for="email" class="mb-1 block text-sm font-semibold text-slate-700">
+      Email
+    </label>
 
-    <div>
-      <label for="confirmPassword">ConfirmPassword:</label>
-      <input 
-        type="text" 
-        id="confirmPassword" 
-        name="confirmPassword" 
-        [(ngModel)]="formData.confirmPassword" 
-        required 
-        #confirmPassword="ngModel"
-        placeholder="confirm your password"
-      />
+    <input
+      type="email"
+      id="email"
+      name="email"
+      [(ngModel)]="formData.email"
+      #email="ngModel"
+      required
+      placeholder="you@gmail.com"
+      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+      [class.border-red-500]="email.invalid && (email.dirty || email.touched)"
+    />
 
-      @if(confirmPassword.touched){
-        @if (formData.password !== formData.confirmPassword){
-          <small>confirm password should match with password.</small>
-        }
-      }
-    </div>
+    @if (email.invalid && (email.dirty || email.touched)) {
+      <small class="mt-1 block text-sm text-red-600">
+        @if (email.errors?.['required']) { Email is required. }
+        @if (email.errors?.['email']) { Enter a valid email address. }
+      </small>
+    }
+  </div>
 
-    <button 
-      type="submit" 
-      [disabled]="form.invalid || formData.password !== formData.confirmPassword">
+  <!-- Password -->
+  <div class="mb-4">
+    <label for="password" class="mb-1 block text-sm font-semibold text-slate-700">
+      Password
+    </label>
+
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="formData.password"
+      #password="ngModel"
+      required
+      minlength="8"
+      placeholder="Enter your password.."
+      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+      [class.border-red-500]="password.invalid && (password.dirty || password.touched)"
+    />
+
+    @if (password.invalid && (password.dirty || password.touched)) {
+      <small class="mt-1 block text-sm text-red-600">
+        @if (password.errors?.['required']) { Password is required. }
+        @if (password.errors?.['minlength']) { Password must be at least 8 characters. }
+      </small>
+    }
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="mb-2">
+    <label for="confirmPassword" class="mb-1 block text-sm font-semibold text-slate-700">
+      Confirm Password
+    </label>
+
+    <input
+      type="password"
+      id="confirmPassword"
+      name="confirmPassword"
+      [(ngModel)]="formData.confirmPassword"
+      #confirmPassword="ngModel"
+      required
+      placeholder="Confirm your password"
+      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+      [class.border-red-500]="confirmPassword.touched && formData.password !== formData.confirmPassword"
+    />
+
+    @if (confirmPassword.touched && formData.password !== formData.confirmPassword) {
+      <small class="mt-1 block text-sm text-red-600">
+        Confirm password should match with password.
+      </small>
+    }
+  </div>
+
+  <!-- Overall mismatch -->
+  @if (
+    password.touched &&
+    confirmPassword.touched &&
+    formData.password !== formData.confirmPassword
+  ) {
+    <small class="mb-2 block text-sm text-red-600">
+      Passwords do not match.
+    </small>
+  }
+
+  <!-- Actions -->
+  <div class="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+
+    <a
+      routerLink="/login"
+      title="Go to login"
+      class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-50 hover:underline hover:decoration-2 hover:underline-offset-4 cursor-pointer"
+    >
+      Have an account? Login
+    </a>
+
+    <button
+      type="submit"
+      [disabled]="form.invalid || formData.password !== formData.confirmPassword"
+      class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white shadow-md transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+    >
       Register
     </button>
 
-  </form>
-</div>
+  </div>
+
+</form>
