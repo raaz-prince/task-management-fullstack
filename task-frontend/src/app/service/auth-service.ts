@@ -1,22 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { RegisterRequest } from '../models/auth/register-request.model';
+import { LoginRequest } from '../models/auth/login-request.model';
+import { AuthResponse } from '../models/auth/auth-response.model';
 
-export interface RegisterRequest {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  token: string;
-  message: string;
-}
 
 @Injectable({
   providedIn: 'root',

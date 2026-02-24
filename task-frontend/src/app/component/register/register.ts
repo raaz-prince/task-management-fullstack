@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService, RegisterRequest } from '../../service/auth-service';
+import { AuthService } from '../../service/auth-service';
+import { RegisterRequest } from '../../models/auth/register-request.model';
+import { AuthResponse } from '../../models/auth/auth-response.model';
 
 @Component({
   selector: 'app-register',
@@ -46,7 +48,7 @@ export class Register {
     this.isSubmitting = true;
 
     this.authService.register(request).subscribe({
-      next: (res) => {
+      next: (res: AuthResponse) => {
         console.log('Registration successful:', res.message);
         form.resetForm();
         this.router.navigate(['/dashboard']);

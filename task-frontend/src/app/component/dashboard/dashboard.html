@@ -1,1 +1,87 @@
-<p>dashboard works!</p>
+<div class="max-w-6xl mx-auto px-6 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold">Task Dashboard</h1>
+            <p class="text-gray-500 text-sm">Manage and track your tasks</p>
+        </div>
+
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+        (click)="openAddTask()"
+        >
+            + Add Task
+        </button>
+        
+        @if( isAddTaskOpen ) {
+            <app-add-task (close)="closeAddTask()"></app-add-task>
+        }
+    </div>
+
+    <div class="flex gap-6 border-b mb-8 text-sm font-medium">
+        <button (click)="changeFilter('ALL')" [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'ALL',
+        'text-gray-500 hover:text-black': selectedFilter !== 'ALL'
+      }" class="pb-2">
+            All ({{ totalCount }})
+        </button>
+
+        <button (click)="changeFilter('TO_DO')" [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'TO_DO',
+        'text-gray-500 hover:text-black': selectedFilter !== 'TO_DO'
+      }" class="pb-2">
+            To Do ({{ todoCount }})
+        </button>
+
+        <button (click)="changeFilter('IN_PROGRESS')" [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'IN_PROGRESS',
+        'text-gray-500 hover:text-black': selectedFilter !== 'IN_PROGRESS'
+      }" class="pb-2">
+            In Progress ({{ inProgressCount }})
+        </button>
+
+        <button (click)="changeFilter('COMPLETED')" [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'COMPLETED',
+        'text-gray-500 hover:text-black': selectedFilter !== 'COMPLETED'
+      }" class="pb-2">
+            Completed ({{ completedCount }})
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-4 gap-4 mb-8">
+
+        <div class="bg-gray-50 p-4 rounded-lg shadow-sm text-center">
+            <p class="text-2xl font-bold">{{ totalCount }}</p>
+            <p class="text-gray-500 text-sm">Total Tasks</p>
+        </div>
+
+        <div class="bg-blue-50 p-4 rounded-lg shadow-sm text-center">
+            <p class="text-2xl font-bold text-blue-600">{{ todoCount }}</p>
+            <p class="text-gray-500 text-sm">To Do</p>
+        </div>
+
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm text-center">
+            <p class="text-2xl font-bold text-yellow-600">{{ inProgressCount }}</p>
+            <p class="text-gray-500 text-sm">In Progress</p>
+        </div>
+
+        <div class="bg-green-50 p-4 rounded-lg shadow-sm text-center">
+            <p class="text-2xl font-bold text-green-600">{{ completedCount }}</p>
+            <p class="text-gray-500 text-sm">Completed</p>
+        </div>
+
+    </div>
+
+    <div class="grid gap-4">
+
+        @for (task of filteredTasks; track task.id) {
+        <app-task-card [task]="task"></app-task-card>
+        }
+
+        @if (filteredTasks.length === 0) {
+        <div class="text-center text-gray-500 py-10">
+            No tasks found for this filter.
+        </div>
+        }
+
+    </div>
+</div>

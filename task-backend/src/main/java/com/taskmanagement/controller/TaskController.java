@@ -11,20 +11,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/task")
+@RequestMapping("api/tasks")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class TaskController {
 
     private final TaskService taskService;
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getTasks() {
         return ResponseEntity.ok("success fully preauthorize works!");
     }
 
     @PostMapping("/create-task")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TaskResponse> addTask(
             @Valid @RequestBody TaskRequest taskRequest
             ) {
