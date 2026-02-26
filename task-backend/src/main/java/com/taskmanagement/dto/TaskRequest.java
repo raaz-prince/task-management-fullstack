@@ -22,6 +22,5 @@ public class TaskRequest {
     @Size(min = 5, max = 500, message = "Description must be between 5 and 500 characters")
     private String description;
 
-    @Future(message = "Due date must be in the future")
     private LocalDate dueDate;
 }

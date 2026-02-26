@@ -9,7 +9,6 @@
   <h2 class="mb-1 text-2xl font-extrabold text-slate-900">
     Welcome back
   </h2>
-
   <p class="mb-6 text-sm text-slate-500">
     Log in to continue managing your tasks.
   </p>
@@ -73,9 +72,34 @@
     }
   </div>
 
-  <!-- Actions -->
-  <div class="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+  <!-- Extras (Optional) -->
+  <!--
+  <div class="mb-4 mt-2 flex items-center justify-between">
+    <label class="inline-flex items-center gap-2 text-sm text-slate-600">
+      <input
+        type="checkbox"
+        name="remember"
+        [(ngModel)]="formData.remember"
+        class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+      />
+      Remember me
+    </label>
 
+    <a
+      routerLink="/forgot-password"
+      class="text-sm text-indigo-600 hover:text-indigo-700 hover:underline underline-offset-4"
+    >
+      Forgot password?
+    </a>
+  </div>
+  -->
+
+  <!-- Actions -->
+  <div
+    class="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between"
+  >
+
+    <!-- Register Link -->
     <a
       routerLink="/register"
       class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-50 hover:underline hover:decoration-2 hover:underline-offset-4 cursor-pointer"
@@ -83,6 +107,7 @@
       Don’t have an account? Register
     </a>
 
+    <!-- Submit Button -->
     <button
       type="submit"
       [disabled]="form.invalid"

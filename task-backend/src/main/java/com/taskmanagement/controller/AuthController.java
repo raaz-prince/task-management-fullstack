@@ -1,8 +1,9 @@
 package com.taskmanagement.controller;
 
-import com.taskmanagement.dto.AuthResponse;
+import com.taskmanagement.dto.LoginResponse;
 import com.taskmanagement.dto.LoginRequest;
 import com.taskmanagement.dto.RegisterRequest;
+import com.taskmanagement.dto.RegisterResponse;
 import com.taskmanagement.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
+    public ResponseEntity<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
             ) {
         return ResponseEntity
@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
+    public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request
             ) {
         return ResponseEntity.ok(authService.login(request));

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../service/auth-service';
-import { LoginRequest } from '../../models/auth/login-request.model';
-import { AuthResponse } from '../../models/auth/auth-response.model';
+
+import { AuthService } from '../../service/auth/auth-service';
+import { LoginRequest } from '../../models/auth/login/login-request.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,50 +14,37 @@ import { AuthResponse } from '../../models/auth/auth-response.model';
   styleUrl: './login.css',
 })
 export class Login {
-
   formData = {
     email: '',
-    password: ''
+    password: '',
   };
 
-  isSubmitting = false;
-  errorMessage: string | null = null;
-
   constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService,
   ) {}
 
   onLogin(form: NgForm): void {
-
     if (form.invalid) {
       return;
     }
 
     const request: LoginRequest = {
-      email: this.formData.email.trim(),
-      password: this.formData.password
+      email: this.formData.email,
+      password: this.formData.password,
     };
 
-    this.isSubmitting = true;
-    this.errorMessage = null;
+    console.log(request);
 
     this.authService.login(request).subscribe({
-      next: (res: AuthResponse) => {
-        console.log('Login successful:', res.message);
-        form.resetForm();
+      next: (res) => {
+        this.toastr.success(res.message, 'Success', { timeOut: 2000 });
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.errorMessage =
-          err?.error?.errorMessage ||
-          err?.error?.message ||
-          'Login failed. Please try again.';
-        console.error('Login error:', this.errorMessage);
+        this.toastr.error(err?.error?.errorMessage || 'Login failed', 'Error');
       },
-      complete: () => {
-        this.isSubmitting = false;
-      }
     });
   }
 }

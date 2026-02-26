@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,14 +44,62 @@ public class TaskService {
 
         Task savedTask = taskRepository.save(task);
 
+        return convertToResponse(savedTask);
+    }
+
+    public List<TaskResponse> getAllTasks(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        return taskRepository.findByUserId(user.getId())
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
+    private TaskResponse convertToResponse(Task task){
         return TaskResponse.builder()
-                .id(savedTask.getId())
-                .title(savedTask.getTitle())
-                .description(savedTask.getDescription())
-                .status(savedTask.getStatus().name())
-                .createdAt(savedTask.getCreatedAt())
-                .dueDate(savedTask.getDueDate())
-                .updatedAt(savedTask.getUpdatedAt())
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .status(task.getStatus().name())
+                .createdAt(task.getCreatedAt())
+                .dueDate(task.getDueDate())
+                .updatedAt(task.getUpdatedAt())
                 .build();
+    }
+
+    public void deleteTask(Long id, String email) {
+        User user =  userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if(!task.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("You are not authorized to perform this action");
+        }
+
+        taskRepository.delete(task);
+    }
+
+    public TaskResponse updateTask(Long id, Status status, String email) {
+        User user =  userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if(!task.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("You are not authorized to perform this action");
+        }
+
+        task.setStatus(status);
+        task.setUpdatedAt(LocalDate.now());
+        Task updatedTask = taskRepository.save(task);
+        return convertToResponse(updatedTask);
     }
 }

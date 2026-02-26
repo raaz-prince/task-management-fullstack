@@ -1,31 +1,24 @@
-<section class="flex min-h-[80vh] flex-col items-center justify-center bg-linear-to-br from-indigo-50 via-white to-purple-50 px-6 text-center">
+<section class="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 to-purple-50 px-6">
+  <div class="max-w-3xl text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-wide">
+      Welcome to TaskManagement
+    </h1>
+    <p class="text-lg md:text-xl text-gray-600 leading-relaxed mb-8">
+      Plan, prioritize, and track your tasks with ease. Create to‑dos, set due dates,
+      monitor progress, and stay organized—so you can focus on what matters.
+    </p>
 
-  <h1 class="mb-6 text-4xl font-extrabold text-slate-900 sm:text-5xl">
-    TaskManagement
-  </h1>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a routerLink="/register"
+        class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold shadow-md hover:bg-indigo-700 transition">
+        Get Started
+      </a>
 
-  <p class="mb-10 max-w-2xl text-lg text-slate-600">
-    TaskManagement is a simple and powerful application designed to help you
-    organize your daily tasks efficiently. Stay productive, manage your
-    workload, and focus on what truly matters — all in one clean and modern interface.
-  </p>
-
-  <div class="flex flex-col gap-4 sm:flex-row">
-
-    <a
-      routerLink="/register"
-      class="rounded-xl bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-md transition hover:bg-indigo-700"
-    >
-      Get Started
-    </a>
-
-    <a
-      routerLink="/login"
-      class="rounded-xl border border-slate-300 bg-white px-6 py-3 text-lg font-semibold text-slate-700 transition hover:bg-slate-50"
-    >
-      Login
-    </a>
-
+      <a routerLink="/login"
+        class="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold shadow-sm hover:bg-gray-100 transition">
+        Login
+      </a>
+    </div>
   </div>
 
 </section>

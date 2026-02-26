@@ -1,8 +1,9 @@
 package com.taskmanagement.service;
 
-import com.taskmanagement.dto.AuthResponse;
+import com.taskmanagement.dto.LoginResponse;
 import com.taskmanagement.dto.LoginRequest;
 import com.taskmanagement.dto.RegisterRequest;
+import com.taskmanagement.dto.RegisterResponse;
 import com.taskmanagement.entity.User;
 import com.taskmanagement.exception.LoginFailedException;
 import com.taskmanagement.exception.UserAlreadyExistsException;
@@ -26,7 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException("Email already exists");
@@ -41,16 +42,12 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
-        String token = jwtService.generateToken(
-                new CustomUserDetails(savedUser)
-        );
-
         String message = savedUser.getName() + " registered successfully!";
 
-        return new AuthResponse(message, token);
+        return new RegisterResponse(message);
     }
 
-    public AuthResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         try {
             authenticationManager.authenticate(
@@ -73,6 +70,6 @@ public class AuthService {
 
         String message = user.getName() + " logged in successfully!";
 
-        return new AuthResponse(message, token);
+        return new LoginResponse(message, token);
     }
 }
