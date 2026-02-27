@@ -18,4 +18,4 @@ spring:
 
 jwt:
   secretKey: q9VxYk3pT2mL8sWzH4fRn6UaC1dE7jKbQ2tPv9XyZ5aN0cLd
-  expirationTime: 360000
+  expirationTime: 3600000

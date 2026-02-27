@@ -1,6 +1,15 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { TaskStatus } from '../../models/task-status';
+import { Task } from '../../models/task/task-response.model';
 
 @Component({
   selector: 'app-task-card',
@@ -14,32 +23,43 @@ export class TaskCard {
   TaskStatus = TaskStatus;
   statuses = Object.values(TaskStatus);
 
-  @Input() task: any;
+  @Input() task!: Task;   // ⚠️ IMPORTANT: Don't use any
 
   @Output() deleteTask = new EventEmitter<number>();
-  @Output() statusChange = new EventEmitter<{ id: number, status: TaskStatus}>();
+  @Output() statusChange = new EventEmitter<{ id: number; status: TaskStatus }>();
+  @Output() viewTask = new EventEmitter<Task>();
+  @Output() editTask = new EventEmitter<Task>();
 
   showDropdown = false;
 
-  constructor(private elementRef: ElementRef){}
+  constructor(private elementRef: ElementRef) {}
+
+  onCardClick(): void {
+    this.viewTask.emit(this.task);
+  }
+
+  onEditClick(): void {
+    this.editTask.emit(this.task);
+  }
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
   }
 
-  onDelete() {
+  onDelete(): void {
     this.deleteTask.emit(this.task.id);
   }
 
-  changeStatus(status: TaskStatus) {
+  changeStatus(status: TaskStatus): void {
     this.statusChange.emit({
       id: this.task.id,
       status: status
     });
+
     this.showDropdown = false;
   }
 
-   getStatusClasses(status: TaskStatus) {
+  getStatusClasses(status: TaskStatus) {
     return {
       'bg-blue-50 text-blue-700 hover:bg-blue-100':
         status === TaskStatus.TO_DO,
@@ -56,8 +76,8 @@ export class TaskCard {
   }
 
   @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if(!this.elementRef.nativeElement.contains(event.target)) {
+  onClickOutside(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showDropdown = false;
     }
   }

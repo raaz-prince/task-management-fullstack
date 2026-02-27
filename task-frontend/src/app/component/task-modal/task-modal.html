@@ -1,0 +1,129 @@
+@if (task) {
+
+<!-- Backdrop -->
+<div
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+  (click)="close.emit()"
+>
+
+  <!-- Modal -->
+  <div
+    class="relative bg-white w-full max-w-lg rounded-xl shadow-xl p-6 animate-fade-in"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- Close -->
+    <button
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl"
+      (click)="close.emit()"
+    >
+      ✕
+    </button>
+
+    <!-- ================= VIEW MODE ================= -->
+    @if (!isEditing) {
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">
+        {{ task.title | uppercase }}
+      </h2>
+
+      <p class="text-gray-600 mb-6">
+        {{ task.description }}
+      </p>
+
+      <div class="space-y-3 text-sm text-gray-700">
+
+        <div class="flex justify-between">
+          <span class="font-medium">Status</span>
+          <span
+            class="px-2 py-1 rounded-full text-xs"
+            [ngClass]="getStatusClasses(task.status)"
+          >
+            {{ task.status }}
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-medium">Created At</span>
+          <span>{{ task.createdAt }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-medium">Last Updated</span>
+          <span>{{ task.updatedAt }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-medium">Due Date</span>
+          <span>{{ task.dueDate }}</span>
+        </div>
+
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button
+          class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition cursor-pointer"
+          (click)="edit.emit(task)"
+        >
+          Edit Task
+        </button>
+      </div>
+
+    } @else {
+
+      <!-- ================= EDIT MODE ================= -->
+
+      <h2 class="text-xl font-semibold mb-4">
+        Edit Task
+      </h2>
+
+      <div class="space-y-4">
+
+        <input
+          type="text"
+          [(ngModel)]="editableTask.title"
+          placeholder="Title"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+
+        <textarea
+          [(ngModel)]="editableTask.description"
+          placeholder="Description"
+          rows="3"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        ></textarea>
+
+        <input
+          type="date"
+          [(ngModel)]="editableTask.dueDate"
+          [min]="todayISO"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+
+      </div>
+
+      <div class="mt-6 flex justify-end gap-2">
+
+        <button
+          class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm px-4 py-2 rounded-md transition cursor-pointer"
+          (click)="cancelEdit.emit()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-md transition cursor-pointer"
+          (click)="save.emit(editableTask)"
+        >
+          Save Changes
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+}

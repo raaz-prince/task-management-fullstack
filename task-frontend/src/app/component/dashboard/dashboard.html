@@ -1,6 +1,6 @@
 <div class="max-w-6xl mx-auto px-6 py-8">
 
-  <!-- Header -->
+  <!-- ================= HEADER ================= -->
   <div class="flex justify-between items-center mb-8">
 
     <div>
@@ -10,52 +10,75 @@
       </p>
     </div>
 
-    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-      (click)="openAddTask()">
+    <button
+      class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition cursor-pointer"
+      (click)="openAddTask()"
+    >
       + Add Task
     </button>
 
     @if (isAddTaskOpen) {
-    <app-add-task (close)="closeAddTask()" (save)="createTask($event)"></app-add-task>
+      <app-add-task
+        (close)="closeAddTask()"
+        (save)="createTask($event)">
+      </app-add-task>
     }
 
   </div>
 
-  <!-- Filters -->
+
+  <!-- ================= FILTERS ================= -->
   <div class="flex gap-6 border-b mb-8 text-sm font-medium">
 
-    <button (click)="changeFilter('ALL')" [ngClass]="{
+    <button
+      class="pb-2"
+      (click)="changeFilter('ALL')"
+      [ngClass]="{
         'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'ALL',
         'text-gray-500 hover:text-black': selectedFilter !== 'ALL'
-      }" class="pb-2">
+      }"
+    >
       All ({{ totalCount }})
     </button>
 
-    <button (click)="changeFilter('TO_DO')" [ngClass]="{
-        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'TO_DO',
-        'text-gray-500 hover:text-black': selectedFilter !== 'TO_DO'
-      }" class="pb-2">
+    <button
+      class="pb-2"
+      (click)="changeFilter(TaskStatus.TO_DO)"
+      [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === TaskStatus.TO_DO,
+        'text-gray-500 hover:text-black': selectedFilter !== TaskStatus.TO_DO
+      }"
+    >
       To Do ({{ todoCount }})
     </button>
 
-    <button (click)="changeFilter('IN_PROGRESS')" [ngClass]="{
-        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'IN_PROGRESS',
-        'text-gray-500 hover:text-black': selectedFilter !== 'IN_PROGRESS'
-      }" class="pb-2">
+    <button
+      class="pb-2"
+      (click)="changeFilter(TaskStatus.IN_PROGRESS)"
+      [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === TaskStatus.IN_PROGRESS,
+        'text-gray-500 hover:text-black': selectedFilter !== TaskStatus.IN_PROGRESS
+      }"
+    >
       In Progress ({{ inProgressCount }})
     </button>
 
-    <button (click)="changeFilter('COMPLETED')" [ngClass]="{
-        'border-b-2 border-blue-600 text-blue-600': selectedFilter === 'COMPLETED',
-        'text-gray-500 hover:text-black': selectedFilter !== 'COMPLETED'
-      }" class="pb-2">
+    <button
+      class="pb-2"
+      (click)="changeFilter(TaskStatus.COMPLETED)"
+      [ngClass]="{
+        'border-b-2 border-blue-600 text-blue-600': selectedFilter === TaskStatus.COMPLETED,
+        'text-gray-500 hover:text-black': selectedFilter !== TaskStatus.COMPLETED
+      }"
+    >
       Completed ({{ completedCount }})
     </button>
 
   </div>
 
-  <!-- Summary Cards -->
-  <div class="grid grid-cols-4 gap-4 mb-8">
+
+  <!-- ================= SUMMARY CARDS ================= -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
     <div class="bg-gray-50 p-4 rounded-lg shadow-sm text-center">
       <p class="text-2xl font-bold">{{ totalCount }}</p>
@@ -68,73 +91,76 @@
     </div>
 
     <div class="bg-yellow-50 p-4 rounded-lg shadow-sm text-center">
-      <p class="text-2xl font-bold text-yellow-600">
-        {{ inProgressCount }}
-      </p>
+      <p class="text-2xl font-bold text-yellow-600">{{ inProgressCount }}</p>
       <p class="text-gray-500 text-sm">In Progress</p>
     </div>
 
     <div class="bg-green-50 p-4 rounded-lg shadow-sm text-center">
-      <p class="text-2xl font-bold text-green-600">
-        {{ completedCount }}
-      </p>
+      <p class="text-2xl font-bold text-green-600">{{ completedCount }}</p>
       <p class="text-gray-500 text-sm">Completed</p>
     </div>
 
   </div>
 
-  <!-- Task List -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
+
+  <!-- ================= TASK LIST ================= -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
     @for (task of filteredTasks; track task.id) {
-    <app-task-card [task]="task" (deleteTask)="handleDelete($event)"
-      (statusChange)="handleStatusChange($event)"></app-task-card>
+      <app-task-card
+        [task]="task"
+        (viewTask)="openModal($event)"
+        (editTask)="openModal($event, true)"
+        (deleteTask)="handleDelete($event)"
+        (statusChange)="handleStatusChange($event)">
+      </app-task-card>
     }
 
-    @if (totalCount === 0) {
+  </div>
+
+
+  <!-- ================= MODAL ================= -->
+  @if (selectedTask) {
+    <app-task-modal
+      [task]="selectedTask"
+      [isEditing]="isEditing"
+      (close)="closeModal()"
+      (edit)="enableEdit()"
+      (cancelEdit)="isEditing = false"
+      (save)="saveEdit($event)">
+    </app-task-modal>
+  }
+
+
+  <!-- ================= EMPTY STATES ================= -->
+
+  @if (totalCount === 0) {
+
     <div class="flex flex-col items-center justify-center text-center py-16 px-6">
 
-      <!-- Icon -->
-      <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-50 text-blue-500 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v14l-4-2-4 2-4-2-4 2V6a2 2 0 012-2z" />
-        </svg>
-      </div>
-
-      <!-- Heading -->
       <h3 class="text-lg font-semibold text-gray-800">
         No tasks found
       </h3>
 
-      <!-- Subtext -->
       <p class="text-sm text-gray-500 mt-2 max-w-sm">
-        Looks like there are no tasks matching this filter.
-        Try adjusting your filter or create a new task to get started.
+        Looks like there are no tasks yet.
+        Create a new task to get started.
       </p>
 
-      <!-- Action Button -->
       <button
-        class="mt-6 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow transition"
+        class="mt-6 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow transition"
         (click)="openAddTask()">
-
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-
         Add New Task
       </button>
 
     </div>
-    }@else if (filteredTasks.length === 0) {
 
-    <!-- 🔎 Filter Empty State -->
+  } @else if (filteredTasks.length === 0) {
+
     <div class="text-center text-gray-500 py-10">
       No tasks found for this filter.
     </div>
 
-    }
-
-  </div>
+  }
 
 </div>
